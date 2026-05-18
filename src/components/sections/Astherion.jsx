@@ -27,7 +27,7 @@ export default function Astherion() {
       />
 
       <div className="relative z-10 max-w-5xl mx-auto">
-        <SectionLabel numeral="IV" title="Astheríon" accentColor="#7c4dff" />
+        <SectionLabel numeral="IV" title="Astherion" accentColor="#7c4dff" />
 
         <motion.p
           className="font-cinzel text-xl md:text-3xl tracking-wider mb-4"
@@ -48,7 +48,7 @@ export default function Astherion() {
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           <p className="font-inter text-sm md:text-base leading-relaxed opacity-70 mb-6">
-            Astheríon is a luxury wearable health-technology brand — building
+            Astherion is a premium wearable wellbess-technology brand — building
             modular biosensor garments that monitor the body's invisible signals.
           </p>
           <p className="font-inter text-sm md:text-base leading-relaxed opacity-70">

@@ -5,7 +5,7 @@ import TimelineNode from '../ui/TimelineNode'
 const timeline = [
   { title: 'UT Dallas', subtitle: 'Biomedical Engineering (B.S.)' },
   { title: 'UT Southwestern Medical Center', subtitle: 'Research Technician — Cardiovascular & Thoracic Anesthesiology' },
-  { title: 'Astheríon', subtitle: 'Founder — Wearable Health-Tech' },
+  { title: 'Astherion', subtitle: 'Founder — Wearable Health-Tech' },
   { title: 'Next', subtitle: 'Medical Device Company & Beyond' },
 ]
 
@@ -30,11 +30,13 @@ export default function About() {
             <p className="font-inter text-sm md:text-base leading-relaxed opacity-70">
               I studied Biomedical Engineering at UT Dallas, where I learned to think
               in systems — biological, electrical, computational. I carried that
-              thinking into UT Southwestern Medical Center, where I now work as a
-              Research Technician in Cardiovascular and Thoracic Anesthesiology.
+              thinking into UT Southwestern Medical Center, where I worked in the
+              Research Department in Cardiovascular and Thoracic Anesthesiology. Currently I am
+              focused on my new venture Astherion, at the intersection of the next generation of 
+              wellness monitoring and AI digital twins
             </p>
             <p className="font-inter text-sm md:text-base leading-relaxed opacity-70">
-              My work sits at the intersection of clinical medicine and engineering:
+              My work sits at the intersection of healthcare/wellness and engineering:
               extracting meaning from physiological data, building automated pipelines,
               and creating tools that make research reproducible and scalable.
             </p>

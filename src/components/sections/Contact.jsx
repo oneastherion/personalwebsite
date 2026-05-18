@@ -12,7 +12,7 @@ export default function Contact() {
 
   function handleSubmit(e) {
     e.preventDefault()
-    const mailtoLink = `mailto:your.email@example.com?subject=${encodeURIComponent(form.subject)}&body=${encodeURIComponent(`From: ${form.name} (${form.email})\n\n${form.message}`)}`
+    const mailtoLink = `mailto:juan.gonzalezflores101@gmail.com.com?subject=${encodeURIComponent(form.subject)}&body=${encodeURIComponent(`From: ${form.name} (${form.email})\n\n${form.message}`)}`
     window.location.href = mailtoLink
   }
 
@@ -89,13 +89,13 @@ export default function Contact() {
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.3 }}
         >
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="font-mono text-xs tracking-wider text-white/30 hover:text-space-accent transition-colors duration-300">
+          <a href="https://www.linkedin.com/in/juangonzalez-flores/" target="_blank" rel="noopener noreferrer" className="font-mono text-xs tracking-wider text-white/30 hover:text-space-accent transition-colors duration-300">
             LinkedIn
           </a>
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="font-mono text-xs tracking-wider text-white/30 hover:text-space-accent transition-colors duration-300">
+          <a href="https://github.com/AstherionTech" target="_blank" rel="noopener noreferrer" className="font-mono text-xs tracking-wider text-white/30 hover:text-space-accent transition-colors duration-300">
             GitHub
           </a>
-          <a href="mailto:your.email@example.com" className="font-mono text-xs tracking-wider text-white/30 hover:text-space-accent transition-colors duration-300">
+          <a href="mailto:juan.gonzalezflores101@gmail.com" className="font-mono text-xs tracking-wider text-white/30 hover:text-space-accent transition-colors duration-300">
             Email
           </a>
         </motion.div>
