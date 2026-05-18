@@ -41,7 +41,7 @@ export default function Skills() {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          Tools, languages, and domains — forged through years of applied work.
+          Tools, languages, and domains, forged through years of applied work.
         </motion.p>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

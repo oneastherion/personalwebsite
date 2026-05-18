@@ -51,11 +51,11 @@ export default function Astherion() {
           </p>
           <p className="font-inter text-sm md:text-base leading-relaxed opacity-70 mb-6">
             The wrist gave us heart rate ($3.6B WHOOP). The finger gave us sleep ($11B Oura). 
-            The torso gives us everything else — and no one is building it.
+            The torso gives us everything else, and no one is building it.
           </p>
           <p className="font-inter text-sm md:text-base leading-relaxed opacity-70">
             Ascendra One is a sensor-integrated performance base layer that captures thermal matrix gradient 
-            and spinal dynamics — physiological data anatomically inaccessible to wrist devices. 
+            and spinal dynamics, physiological data anatomically inaccessible to wrist devices. 
             The hardware is the data acquisition layer. The AI is the product. The dataset is the company.
           </p>
         </motion.div>

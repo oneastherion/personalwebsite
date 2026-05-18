@@ -4,7 +4,7 @@ import TimelineNode from '../ui/TimelineNode'
 
 const timeline = [
   { title: 'UT Dallas', subtitle: 'Biomedical Engineering (B.S.) — 2024' },
-  { title: 'UT Southwestern Medical Center', subtitle: 'Research Technician — Cardiovascular & Thoracic Anesthesiology' },
+  { title: 'UT Southwestern Medical Center', subtitle: 'Research — Cardiovascular & Thoracic Anesthesiology' },
   { title: 'Self-Taught', subtitle: 'PCB Design, Firmware, Sensor Fusion, CAD, Full-Stack Mobile' },
   { title: 'Astherion', subtitle: 'Founder — Building the AI that reads data Apple cannot collect' },
 ]
@@ -29,7 +29,7 @@ export default function About() {
             
             <p className="font-inter text-sm md:text-base leading-relaxed opacity-70">
               At UT Southwestern, I built automated research pipelines for cardiovascular 
-              and anesthesiology trials — clinical-grade data systems. I learned what 
+              and anesthesiology trials, clinical-grade data systems. I learned what 
               "medical-grade" actually means: reproducibility, validation, accountability. 
               I learned that physiological data is only valuable if you can extract signal from noise.
             </p>
@@ -37,8 +37,8 @@ export default function About() {
             <p className="font-inter text-sm md:text-base leading-relaxed opacity-70">
               Then I realized: the wrist gave us heart rate. The finger gave us sleep. 
               No one is measuring the largest, most information-rich surface of the human body. 
-              So I taught myself everything — PCB design, embedded systems, sensor fusion, 
-              firmware, full-stack mobile — and built a prototype that proved it.
+              So I taught myself everything, PCB design, embedded systems, sensor fusion, 
+              firmware, full-stack mobile, and built a prototype that proved it.
             </p>
             
             <p className="font-inter text-sm md:text-base leading-relaxed opacity-70">
