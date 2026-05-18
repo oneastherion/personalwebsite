@@ -1,19 +1,18 @@
 import { motion } from 'framer-motion'
 import SectionLabel from '../ui/SectionLabel'
 
-const capabilities = [
-  { label: 'EDA', desc: 'Stress & emotional response' },
-  { label: 'HR / HRV', desc: 'Cardiovascular state' },
-  { label: 'Temperature', desc: 'Thermoregulation patterns' },
-  { label: 'IMU', desc: 'Movement & posture dynamics' },
+const moats = [
+  { label: 'Thermal Matrix', desc: 'Metabolic state & cardiovascular stress' },
+  { label: 'Spinal Dynamics', desc: 'Load, compensation, injury prediction' },
+  { label: 'Edge AI', desc: 'Real-time inference on Apollo510B' },
+  { label: 'Dataset', desc: 'The torso data Apple cannot build' },
 ]
 
-const architecture = [
-  'Modular sensor pods',
-  'Conductive textile integration',
-  'Edge processing (ESP32 / nRF52)',
-  'Cloud analytics pipeline',
-  'Predictive stress & recovery models',
+const trajectory = [
+  '2026–27: Performance Coach ($45B)',
+  '2027–28: Predictive Prevention ($200B)',
+  '2029–30: Pre-symptomatic Health ($500B)',
+  '2031+: Personalized Medicine ($1T+)',
 ]
 
 export default function Astherion() {
@@ -37,7 +36,7 @@ export default function Astherion() {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          Intelligence, woven into form.
+          The body is the next data platform.
         </motion.p>
 
         <motion.div
@@ -48,21 +47,24 @@ export default function Astherion() {
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           <p className="font-inter text-sm md:text-base leading-relaxed opacity-70 mb-6">
-            Astherion is a premium wearable wellbess-technology brand — building
-            modular biosensor garments that monitor the body's invisible signals.
+            Astherion is building the AI that learns it.
+          </p>
+          <p className="font-inter text-sm md:text-base leading-relaxed opacity-70 mb-6">
+            The wrist gave us heart rate ($3.6B WHOOP). The finger gave us sleep ($11B Oura). 
+            The torso gives us everything else — and no one is building it.
           </p>
           <p className="font-inter text-sm md:text-base leading-relaxed opacity-70">
-            The data flows into predictive models — turning raw physiology
-            into actionable health intelligence. This is not a fitness tracker
-            disguised as clothing. This is medical-grade sensing, built for daily life.
+            Ascendra One is a sensor-integrated performance base layer that captures thermal matrix gradient 
+            and spinal dynamics — physiological data anatomically inaccessible to wrist devices. 
+            The hardware is the data acquisition layer. The AI is the product. The dataset is the company.
           </p>
         </motion.div>
 
-        {/* Sensor capabilities */}
+        {/* The moat */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-20">
-          {capabilities.map((cap, i) => (
+          {moats.map((moat, i) => (
             <motion.div
-              key={cap.label}
+              key={moat.label}
               className="border border-white/5 p-5 text-center relative overflow-hidden"
               style={{ backgroundColor: 'rgba(124,77,255,0.03)' }}
               initial={{ opacity: 0, scale: 0.9 }}
@@ -85,14 +87,14 @@ export default function Astherion() {
                 transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
               />
               <h4 className="font-mono text-xs tracking-wider text-space-accent mb-1">
-                {cap.label}
+                {moat.label}
               </h4>
-              <p className="text-xs font-inter opacity-50">{cap.desc}</p>
+              <p className="text-xs font-inter opacity-50">{moat.desc}</p>
             </motion.div>
           ))}
         </div>
 
-        {/* Vision + Architecture */}
+        {/* Vision + Trajectory */}
         <div className="grid md:grid-cols-2 gap-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -101,12 +103,13 @@ export default function Astherion() {
             transition={{ duration: 0.6 }}
           >
             <h3 className="font-mono text-xs tracking-[0.2em] uppercase text-space-accent mb-4">
-              The Vision
+              The Bet
             </h3>
             <p className="font-inter text-sm leading-relaxed opacity-70">
-              Build a vertically integrated health-tech platform — from fiber
-              to firmware to cloud — that redefines how humans understand
-              their own biology.
+              Build the AI platform that owns distributed torso physiology — 
+              starting with performance coaching, scaling to injury prediction, 
+              and ultimately powering personalized medicine. Performance is the wedge. 
+              Medicine is the prize.
             </p>
           </motion.div>
 
@@ -117,12 +120,12 @@ export default function Astherion() {
             transition={{ duration: 0.6, delay: 0.15 }}
           >
             <h3 className="font-mono text-xs tracking-[0.2em] uppercase text-space-accent mb-4">
-              The Architecture
+              The Trajectory
             </h3>
             <div className="space-y-2">
-              {architecture.map((item, i) => (
+              {trajectory.map((phase, i) => (
                 <motion.div
-                  key={item}
+                  key={phase}
                   className="flex items-center gap-3 text-sm font-inter opacity-60"
                   initial={{ opacity: 0, x: -10 }}
                   whileInView={{ opacity: 0.6, x: 0 }}
@@ -130,7 +133,7 @@ export default function Astherion() {
                   transition={{ delay: i * 0.08 }}
                 >
                   <span className="w-4 h-px" style={{ backgroundColor: '#7c4dff' }} />
-                  {item}
+                  {phase}
                 </motion.div>
               ))}
             </div>
