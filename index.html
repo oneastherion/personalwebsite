@@ -1,17 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" data-motion="still">
   <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Juan Gonzalez Flores — Builder. Engineer. Visionary.</title>
-    <meta name="description" content="Biomedical Engineer, Research Technician, and Founder of Astheríon, building the future of wearable health technology." />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!--head-outlet-->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="/fonts/bricolage-var.woff2" as="font" type="font/woff2" crossorigin />
+    <script>
+      (function () {
+        var d = document.documentElement
+        d.classList.add('js')
+        var pref = 'on'
+        try {
+          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) pref = 'off'
+          var s = localStorage.getItem('motion')
+          if (s === 'off' || s === 'on') pref = s
+        } catch (e) {}
+        d.setAttribute('data-motion', pref === 'off' ? 'still' : 'on')
+      })()
+    </script>
+    <script type="module" src="/src/entry-client.jsx"></script>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <div id="root" data-page="<!--page-outlet-->"><!--ssr-outlet--></div>
   </body>
 </html>
