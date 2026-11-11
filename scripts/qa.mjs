@@ -63,7 +63,7 @@ for (const [label, vp] of [['390', { width: 390, height: 844 }], ['1440', { widt
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
     ok(`${label}/${motion}: no horizontal overflow`, overflow <= 0, String(overflow))
     // Patch panel: open by keyboard, Escape closes, focus returns.
-    await page.evaluate(() => document.getElementById('orbit').scrollIntoView())
+    await page.evaluate(() => document.getElementById('campaigns').scrollIntoView())
     await page.waitForTimeout(500)
     const btn = page.locator('[data-patch="thermal"] .patch')
     await btn.focus()

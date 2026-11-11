@@ -124,7 +124,7 @@ body::after {
 }
 html[data-motion='on'] .giant__word:not([data-first]) { visibility: hidden; opacity: 0; }
 .figure {
-  position: absolute; left: 50%; bottom: 0; height: min(84svh, 118vw); aspect-ratio: 720 / 735; transform: translateX(-50%);
+  position: absolute; left: 50%; bottom: 0; width: 132vw; aspect-ratio: 760 / 505; transform: translateX(-50%);
   -webkit-mask-image: linear-gradient(to top, transparent 0, #000 16%);
   mask-image: linear-gradient(to top, transparent 0, #000 16%);
 }
@@ -137,7 +137,7 @@ html[data-motion='on'] .giant__word:not([data-first]) { visibility: hidden; opac
   .sun { left: 70%; top: 12%; width: 72svh; margin-left: -36svh; }
   .giant { left: 40%; right: calc(var(--rail) + 16px); top: 8svh; height: 52svh; }
   .giant__word { font-size: min(22vw, calc(96vw / var(--len)), 50svh); }
-  .figure { left: 70%; height: 86svh; }
+  .figure { left: 66%; width: min(64vw, 118svh); }
   /* a dark side so the copy always reads, whatever is behind it */
   .stage::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(8, 10, 14, 0.82) 0%, rgba(8, 10, 14, 0.55) 30%, rgba(8, 10, 14, 0) 52%); }
 }
@@ -146,7 +146,7 @@ html[data-motion='on'] .giant__word:not([data-first]) { visibility: hidden; opac
 .hero, .chapter { position: relative; z-index: 1; padding: 0 var(--gutter); padding-right: calc(var(--gutter) + var(--rail)); }
 .hero { min-height: 100svh; display: flex; align-items: flex-end; padding-bottom: var(--s-8); }
 .chapter { min-height: 160svh; padding-top: 30svh; padding-bottom: 20svh; }
-#orbit, #deep-space { min-height: 180svh; }
+#campaigns, #astherion, #frontier { min-height: 180svh; }
 .copy { max-width: 520px; }
 .copy--wide { max-width: 520px; }
 
@@ -180,7 +180,7 @@ html[data-motion='on'] .giant__word:not([data-first]) { visibility: hidden; opac
   .copy--hero::before { content: ''; position: absolute; left: calc(-1 * var(--gutter)); right: calc(-1 * var(--gutter)); top: -14svh; bottom: calc(-1 * var(--s-8)); background: linear-gradient(180deg, rgba(8, 10, 14, 0) 0%, rgba(8, 10, 14, 0.86) 14svh, rgba(8, 10, 14, 0.94) 100%); z-index: -1; }
   .copy--hero .kicker { display: none; }
   .copy--hero .display { font-size: clamp(48px, 15vw, 64px); }
-  .figure { bottom: 26svh; height: 56svh; }
+  .figure { bottom: 26svh; width: 132vw; }
   .giant { top: 8svh; height: 34svh; }
   .giant__word { font-size: min(32vw, calc(190vw / var(--len)), 34svh); }
   .sun { top: 10svh; width: 84vw; margin-left: -42vw; }
@@ -308,3 +308,13 @@ html:not([data-motion='on']) .sky__layer:not(:first-child) { opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+
+.skills--arsenal { margin-top: var(--s-6); gap: var(--s-5); }
+.skills--arsenal dt { font-family: var(--f-display); font-weight: 700; font-size: var(--step-1); letter-spacing: 0.01em; }
+.campaign { margin-top: var(--s-7); }
+.patches--five { gap: var(--s-5); }
+@media (max-width: 899px) { .patches--five .patch-slot { width: calc(50% - var(--s-3)); } }
+.contact { margin-top: var(--s-7); }
+
+/* the wide avatar bleeds past the edges on phones; never let it scroll the page sideways */
+html, .track { overflow-x: clip; }

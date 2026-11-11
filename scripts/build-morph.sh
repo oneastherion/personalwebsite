@@ -4,8 +4,8 @@
 # usage: scripts/build-morph.sh <fps> clip1.mp4 clip2.mp4 clip3.mp4
 set -euo pipefail
 fps="$1"; shift
-for size in 640 400; do
-  suffix=""; [ "$size" = "400" ] && suffix="-s"
+for size in 760 440; do
+  suffix=""; [ "$size" = "440" ] && suffix="-s"
   out="public/hero/morph${suffix}"
   find "$out" -name '*.webp' -delete 2>/dev/null || true
   mkdir -p "$out"

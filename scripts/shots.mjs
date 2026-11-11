@@ -14,7 +14,7 @@ if (!base) {
 }
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium', args: ['--no-sandbox', '--use-gl=swiftshader', '--enable-webgl', '--ignore-gpu-blocklist'] })
 const sizes = { m: { width: 390, height: 844, mobile: true }, d: { width: 1440, height: 900, mobile: false } }
-const ids = ['hall', 'first-light', 'thin-air', 'orbit', 'deep-space']
+const ids = ['chronicle', 'arsenal', 'campaigns', 'astherion', 'frontier']
 const errors = []
 const only = process.env.ONLY // e.g. "d-on"
 for (const [sk, vp] of Object.entries(sizes)) {

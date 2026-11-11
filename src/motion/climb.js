@@ -16,16 +16,16 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)]
 
 // Story order. `morph` is the slice of the knight-to-astronaut clip each chapter scrubs through.
 const STOPS = [
-  { id: 'top', sky: 'forge', morph: null, giant: 'top' },
-  // knight -> scholar while the education chapter reads
-  { id: 'hall', sky: 'forge', morph: [0, 1 / 3], giant: 'hall' },
-  // scholar -> scientist through UT Southwestern
-  { id: 'first-light', sky: 'dawn', morph: [1 / 3, 2 / 3], giant: 'first-light' },
-  // the scientist holds through Abbott
-  { id: 'thin-air', sky: 'atmosphere', morph: [2 / 3, 2 / 3], giant: 'first-light' },
+  { id: 'top', sky: 'forge', morph: [0, 0], giant: 'chronicle' },
+  // the knight holds through the story so far
+  { id: 'chronicle', sky: 'forge', morph: [0, 0], giant: 'chronicle' },
+  // knight -> graduate as the arsenal is laid out
+  { id: 'arsenal', sky: 'dawn', morph: [0, 1 / 3], giant: 'arsenal' },
+  // graduate -> scientist through the campaigns
+  { id: 'campaigns', sky: 'atmosphere', morph: [1 / 3, 2 / 3], giant: 'campaigns' },
   // scientist -> astronaut for Astherion
-  { id: 'orbit', sky: 'orbit', morph: [2 / 3, 1], giant: 'orbit' },
-  { id: 'deep-space', sky: 'deep', morph: [1, 1], giant: 'orbit' },
+  { id: 'astherion', sky: 'orbit', morph: [2 / 3, 1], giant: 'astherion' },
+  { id: 'frontier', sky: 'deep', morph: [1, 1], giant: 'frontier' },
 ]
 
 function smoothScroll() {
@@ -82,9 +82,9 @@ function skyLayers(story) {
 
 function giantType() {
   const words = $$('.giant__word')
-  let active = 'top'
+  let active = 'chronicle'
   gsap.set(words, { autoAlpha: 0, yPercent: 0 })
-  gsap.set('[data-giant="top"]', { autoAlpha: 1 })
+  gsap.set('[data-giant="chronicle"]', { autoAlpha: 1 })
   const show = (id, dir) => {
     if (id === active) return
     const out = $('[data-giant="' + active + '"]')
@@ -173,12 +173,12 @@ function drift() {
   const o = presets.orbit
   $$('.drift > .patch').forEach((el, i) => {
     const t = gsap.to(el, { y: i % 2 ? 8 : -8, x: i % 2 ? -4 : 4, rotate: i % 2 ? -2 : 2, duration: o.loop[0] / 2 + i, ease: o.ease, yoyo: true, repeat: -1, paused: true })
-    ScrollTrigger.create({ trigger: '#orbit', start: 'top bottom', end: 'bottom top', onToggle: (s) => t.paused(!s.isActive) })
+    ScrollTrigger.create({ trigger: '#campaigns', start: 'top bottom', end: 'bottom bottom', onToggle: (s) => t.paused(!s.isActive) })
   })
 }
 
 async function splitDeep() {
-  const h = $('#deep-space [data-split]')
+  const h = $('#frontier [data-split]')
   if (!h) return
   const { SplitText } = await import('gsap/SplitText')
   gsap.registerPlugin(SplitText)
@@ -188,7 +188,7 @@ async function splitDeep() {
   gsap.fromTo(
     split.chars,
     { x: () => gsap.utils.random(-d.distance[0], d.distance[0]), y: () => gsap.utils.random(-60, 60), rotate: () => gsap.utils.random(-18, 18) },
-    { x: 0, y: 0, rotate: 0, ease: 'power2.out', stagger: 0.02, scrollTrigger: { trigger: '#deep-space', start: 'top 80%', end: 'top 25%', scrub: d.scrub } },
+    { x: 0, y: 0, rotate: 0, ease: 'power2.out', stagger: 0.02, scrollTrigger: { trigger: '#frontier', start: 'top 80%', end: 'top 25%', scrub: d.scrub } },
   )
 }
 
@@ -198,7 +198,7 @@ function heroEntrance() {
   const f = presets.forge
   const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
   tl.from('.sun', { scale: 0.6, opacity: 0, duration: 1.2 }, 0)
-    .from('[data-giant="top"]', { yPercent: 60, duration: 1.0, ease: 'power4.out' }, 0.15)
+    .from('[data-giant="chronicle"]', { yPercent: 60, duration: 1.0, ease: 'power4.out' }, 0.15)
     .from('.figure', { y: -40, duration: f.duration + 0.25, ease: f.settle }, 0.35)
 }
 

@@ -22,16 +22,22 @@ export const hero = {
 }
 
 export const chapters = [
-  { id: 'hall', env: 'forge', label: 'The hall', altitude: '0 m', alt: 0 },
-  { id: 'first-light', env: 'dawn', label: 'First light', altitude: '3,000 m', alt: 3000 },
-  { id: 'thin-air', env: 'atmosphere', label: 'Thin air', altitude: '12,000 m', alt: 12000 },
-  { id: 'orbit', env: 'orbit', label: 'Orbit', altitude: '408 km', alt: 408000 },
-  { id: 'deep-space', env: 'deep', label: 'Deep space', altitude: '384,000 km', alt: 384000000 },
+  { id: 'chronicle', env: 'forge', label: 'The Chronicle', altitude: '0 m', alt: 0 },
+  { id: 'arsenal', env: 'dawn', label: 'The Arsenal', altitude: '3,000 m', alt: 3000 },
+  { id: 'campaigns', env: 'atmosphere', label: 'The Campaigns', altitude: '12,000 m', alt: 12000 },
+  { id: 'astherion', env: 'orbit', label: 'Astherion', altitude: '408 km', alt: 408000 },
+  { id: 'frontier', env: 'deep', label: 'The Next Frontier', altitude: '384,000 km', alt: 384000000 },
 ]
 
+export const sections = {
+  chronicle: { title: 'The Chronicle', sub: 'Where I trained, and where I have worked' },
+  arsenal: { title: 'The Arsenal', sub: 'What I work with' },
+  campaigns: { title: 'The Campaigns', sub: 'Work and projects. Open a patch for the facts.' },
+  astherion: { title: 'Astherion' },
+  frontier: { title: 'The Next Frontier' },
+}
+
 export const hall = {
-  title: 'The hall',
-  sub: 'Where I learned the craft',
   entries: [
     {
       org: 'Sherwin-Williams',
@@ -58,7 +64,6 @@ export const hall = {
 }
 
 export const firstLight = {
-  title: 'First light',
   org: 'UT Southwestern Medical Center',
   place: 'Dallas, TX',
   role: 'Research Technician',
@@ -71,7 +76,6 @@ export const firstLight = {
 }
 
 export const thinAir = {
-  title: 'Thin air',
   org: 'Abbott Diabetes Care',
   place: 'Alameda, CA',
   role: 'Complaint Investigations Technician',
@@ -84,7 +88,6 @@ export const thinAir = {
 }
 
 export const orbit = {
-  title: 'Orbit',
   org: 'Astherion, Inc.',
   role: 'Founder and lead engineer',
   dates: 'Jun 2025 to present',
@@ -171,7 +174,6 @@ export const patches = {
 }
 
 export const deepSpace = {
-  title: 'Deep space',
   line: 'If you’re building sensing hardware, write to me.',
   skills: [
     { group: 'Firmware', items: 'C/C++, nRF52840, FreeRTOS, BLE' },
