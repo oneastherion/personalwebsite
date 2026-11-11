@@ -98,7 +98,7 @@ for (const [label, vp] of [['390', { width: 390, height: 844 }], ['1440', { widt
   const vis = await page.locator('#panel-utsw .panel').isVisible()
   ok('no JavaScript: patch facts visible inline', vis)
   const h1 = await page.locator('h1').innerText()
-  ok('no JavaScript: h1 present', h1.includes('Juan Gonzalez Flores'))
+  ok('no JavaScript: h1 present', h1.replace(/\s+/g, ' ').includes('Juan Gonzalez Flores'))
   await ctx.close()
 }
 await browser.close()

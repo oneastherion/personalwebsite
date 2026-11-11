@@ -1,17 +1,28 @@
 // The climb: every scroll-linked effect on the page. Loaded after hydration, never in the way of content.
-// Hygiene: only transform, opacity and SVG attributes (d, fill, fill-opacity) are animated.
+// Layers: a WebGL particle field (embers -> dust -> streaks -> stars), giant type behind the figure,
+// and the figure itself: AI video cut out of a magenta backdrop, played as a frame flipbook on a canvas.
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { MorphSVGPlugin } from 'gsap/MorphSVGPlugin'
 import Lenis from 'lenis'
 import { presets } from './presets.js'
-import { PATHS } from '../components/Helm.jsx'
 import { altitudeReadout } from './altitude.js'
+import { Flipbook } from './flipbook.js'
+import { startParticles } from './particles.js'
 
-gsap.registerPlugin(ScrollTrigger, MorphSVGPlugin)
+gsap.registerPlugin(ScrollTrigger)
 
 const $ = (s, r = document) => r.querySelector(s)
 const $$ = (s, r = document) => [...r.querySelectorAll(s)]
+
+// Story order. `morph` is the slice of the knight-to-astronaut clip each chapter scrubs through.
+const STOPS = [
+  { id: 'top', sky: 'forge', morph: null },
+  { id: 'hall', sky: 'forge', morph: [0, 0.2] },
+  { id: 'first-light', sky: 'dawn', morph: [0.2, 0.5] },
+  { id: 'thin-air', sky: 'atmosphere', morph: [0.5, 0.78] },
+  { id: 'orbit', sky: 'orbit', morph: [0.78, 1] },
+  { id: 'deep-space', sky: 'deep', morph: null },
+]
 
 function smoothScroll() {
   const lenis = new Lenis({ duration: 1.1, anchors: true, syncTouch: false })
@@ -29,171 +40,186 @@ function progressLine() {
   ScrollTrigger.create({ start: 0, end: 'max', onUpdate: (s) => set(s.progress) })
 }
 
-function skyLayers() {
-  const layer = (env) => $(`.sky__layer[data-sky="${env}"]`)
-  const ramps = [
-    ['atmosphere', '#thin-air'],
-    ['orbit', '#orbit'],
-    ['deep', '#deep-space'],
-  ]
-  ramps.forEach(([env, trigger], i) => {
-    const preset = presets[i === 0 ? 'ascent' : i === 1 ? 'orbit' : 'drift']
-    gsap.fromTo(
-      layer(env),
-      { opacity: 0 },
-      {
-        opacity: 1,
-        ease: 'none',
-        scrollTrigger: { trigger, start: 'top 92%', end: 'top 28%', scrub: preset.scrub },
+// One number for "how far up are we": 0 at the top, 5 at deep space. Everything reads it.
+function storyClock(onChange) {
+  const story = { value: 0 }
+  STOPS.forEach((stop, i) => {
+    if (i === 0) return
+    ScrollTrigger.create({
+      trigger: `#${stop.id}`,
+      start: 'top 85%',
+      end: 'top 15%',
+      onUpdate: (s) => {
+        story.value = i - 1 + s.progress
+        onChange(story.value)
       },
-    )
+      onLeaveBack: () => {
+        story.value = i - 1
+        onChange(story.value)
+      },
+    })
   })
+  return story
 }
 
-function signature() {
-  const stageWrap = $('.stage-wrap')
-  if (!stageWrap) return
-  const P = PATHS
-  const tl = gsap.timeline({
-    defaults: { ease: 'none' },
-    scrollTrigger: { trigger: stageWrap, start: 'top top', end: 'bottom bottom', scrub: presets.forge.scrub },
-  })
-  gsap.set(['.sp-b', '.sp-c'], { autoAlpha: 0 })
-  const d = presets.forge.distance[1]
-
-  // Words: the hero hands over to the hall, entry by entry. All of it is plain text at rest.
-  tl.to('.sp-a', { autoAlpha: 0, y: -d, duration: 0.07 }, 0.1)
-  tl.fromTo('.sp-b', { autoAlpha: 0, y: d }, { autoAlpha: 1, y: 0, duration: 0.07 }, 0.18)
-  tl.to('.sp-b', { autoAlpha: 0, y: -d, duration: 0.07 }, 0.36)
-  tl.fromTo('.sp-c', { autoAlpha: 0, y: d }, { autoAlpha: 1, y: 0, duration: 0.07 }, 0.44)
-  tl.to('.sp-c', { autoAlpha: 0, y: -d, duration: 0.07 }, 0.68)
-
-  // The helm comes apart: crest and bars first, the glow in the slit goes out.
-  tl.to('[data-part=rivets]', { y: -18, opacity: 0, duration: 0.12 }, 0.14)
-  tl.to('[data-part=bars]', { opacity: 0, duration: 0.12 }, 0.18)
-  tl.to('#glow', { opacity: 0, duration: 0.1 }, 0.3)
-
-  // Silhouette, facet and slit morph together: helm to helmet, slit to visor.
-  const m = { duration: 0.38, ease: 'power1.inOut' }
-  tl.to('#shell', { morphSVG: { shape: P.helmet.shell }, fill: '#E8EDF1', ...m }, 0.34)
-  tl.to('#shade', { morphSVG: { shape: P.helmet.shade }, fillOpacity: 0.18, ...m }, 0.34)
-  tl.to('#visor', { morphSVG: { shape: P.helmet.visor }, ...m }, 0.34)
-  tl.to('#visorClipPath', { morphSVG: { shape: P.helmet.visor }, ...m }, 0.34)
-
-  // The visor lights up and mirrors the next chapter.
-  tl.fromTo('#reflect', { opacity: 0, y: 60 }, { opacity: 1, y: -6, duration: 0.3 }, 0.58)
-  tl.to('#ports', { opacity: 1, duration: 0.12 }, 0.66)
-  tl.fromTo('#collar', { opacity: 0, y: -22 }, { opacity: 1, y: 0, duration: 0.14, ease: 'power2.out' }, 0.76)
-
-  // The helmet takes the centre of the screen as the words leave.
-  const mobile = window.matchMedia('(max-width: 899px)').matches
-  tl.to(
-    '.helm-live',
-    {
-      x: () => {
-        const r = $('.helm-live').getBoundingClientRect()
-        const cx = r.left - gsap.getProperty('.helm-live', 'x') + r.width / 2
-        return window.innerWidth / 2 - cx - (mobile ? 0 : 66)
-      },
-      scale: mobile ? 1.5 : 1.08,
-      transformOrigin: mobile ? '50% 0%' : '50% 50%',
-      ease: 'power2.inOut',
-      duration: 0.22,
-    },
-    0.72,
-  )
-  tl.to({}, { duration: 0.05 }, 0.98)
-
-  // The sky leaves the forge for first light over the same stretch.
-  tl.fromTo('.sky__layer[data-sky="dawn"]', { opacity: 0 }, { opacity: 1, duration: 0.55 }, 0.4)
-
-  // Weight on arrival: the helm settles once, firmly, when the page loads.
-  if (window.scrollY < 4) {
-    gsap.from('.helm-live', { y: -presets.forge.distance[1], duration: presets.forge.duration + 0.15, ease: presets.forge.settle })
+function skyLayers(story) {
+  const layers = Object.fromEntries($$('.sky__layer').map((el) => [el.dataset.sky, el]))
+  const order = ['forge', 'dawn', 'atmosphere', 'orbit', 'deep']
+  const set = order.map((k) => gsap.quickSetter(layers[k], 'opacity'))
+  return (v) => {
+    // v: 0..5 story clock. Chapter i (1..5) is fully lit at v = i.
+    const s = Math.max(0, v - 1)
+    order.forEach((_, k) => {
+      if (k === 0) return
+      set[k](Math.min(1, Math.max(0, s - (k - 1))))
+    })
   }
 }
 
-function ascentScenes() {
-  const a = presets.ascent
-  // First light: ramparts sink, the sun rises.
-  gsap.fromTo('[data-sink=ramparts]', { y: -a.distance[0] }, { y: a.distance[1] + 40, ease: 'none', scrollTrigger: { trigger: '#first-light', start: 'top bottom', end: 'bottom top', scrub: a.scrub } })
-  gsap.fromTo('[data-rise=sun]', { y: a.distance[1] }, { y: -a.distance[1] - 60, ease: 'none', scrollTrigger: { trigger: '#first-light', start: 'top bottom', end: 'bottom top', scrub: a.scrub } })
-  // Thin air: three cloud layers drift sideways, only while on screen.
-  const speeds = { far: 90, mid: 60, near: 40 }
-  Object.entries(speeds).forEach(([k, secs]) => {
-    const tween = gsap.fromTo(`[data-drift=${k}]`, { x: -60 }, { x: 60, duration: secs / 4, ease: 'sine.inOut', yoyo: true, repeat: -1, paused: true })
-    ScrollTrigger.create({ trigger: '#thin-air', start: 'top bottom', end: 'bottom top', onToggle: (s) => tween.paused(!s.isActive) })
+function giantType() {
+  const words = $$('.giant__word')
+  let active = 'top'
+  gsap.set(words, { autoAlpha: 0, yPercent: 0 })
+  gsap.set('[data-giant="top"]', { autoAlpha: 1 })
+  const show = (id, dir) => {
+    if (id === active) return
+    const out = $('[data-giant="' + active + '"]')
+    const inn = $('[data-giant="' + id + '"]')
+    const p = presets.ascent
+    gsap.to(out, { yPercent: dir > 0 ? -35 : 35, autoAlpha: 0, duration: p.duration * 0.6, ease: 'power2.in', overwrite: true })
+    gsap.fromTo(inn, { yPercent: dir > 0 ? 35 : -35, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: p.duration, delay: p.duration * 0.35, ease: 'power3.out', overwrite: true })
+    active = id
+  }
+  STOPS.forEach((stop, i) => {
+    if (i === 0) return
+    ScrollTrigger.create({
+      trigger: '#' + stop.id,
+      start: 'top 55%',
+      onEnter: () => show(stop.id, 1),
+      onLeaveBack: () => show(STOPS[i - 1].id, -1),
+    })
   })
-  // Torch flicker in the hall is a slow, weighty loop, not a pulse.
-  const torch = gsap.to('[data-drift=torch]', { y: -3, duration: 1.4, ease: 'sine.inOut', yoyo: true, repeat: -1, paused: true })
-  ScrollTrigger.create({ trigger: '#hall', start: 'top bottom', end: 'bottom top', onToggle: (s) => torch.paused(!s.isActive) })
 }
 
-function orbitScenes() {
+function sunAndFigure(story) {
+  // the sun is low and huge in the hall, rises at dawn, and shrinks to a point by orbit
+  const sun = $('.sun')
+  const fig = $('.figure')
+  const tl = gsap.timeline({ paused: true, defaults: { ease: 'none' } })
+  tl.fromTo(sun, { yPercent: 20, scale: 1 }, { yPercent: -40, scale: 0.85, duration: 2 })
+    .to(sun, { yPercent: -120, scale: 0.18, opacity: 0.9, duration: 2 })
+    .to(sun, { opacity: 0, duration: 1 })
+  // the figure gets lighter as it climbs: it settles in the forge and floats by deep space
+  const fl = gsap.timeline({ paused: true, defaults: { ease: 'none' } })
+  fl.to(fig, { y: 0, duration: 5 })
+  return (v) => {
+    tl.progress(Math.min(1, v / 5))
+    fl.progress(Math.min(1, v / 5))
+  }
+}
+
+function figure() {
+  const canvas = $('.figure__canvas')
+  const poster = $('.figure__poster')
+  const book = new Flipbook(canvas)
+  let mode = 'idle'
+  let target = 0
+  let shown = 0
+  book.load('idle').then(() => {
+    book.loop('idle')
+    canvas.classList.add('is-on')
+    poster.classList.add('is-hidden')
+    // the climb clip starts loading once the hero is on screen
+    book.load('morph')
+  })
+  // ease the scrubbed frame toward its target so a flick of the wheel still plays every frame
+  gsap.ticker.add(() => {
+    if (mode !== 'morph') return
+    shown += (target - shown) * 0.22
+    book.scrub('morph', shown)
+  })
+  const setMode = (m) => {
+    if (m === mode) return
+    mode = m
+    if (m === 'idle') book.loop('idle')
+    if (m === 'float') book.load('float').then(() => mode === 'float' && book.loop('float'))
+    if (m === 'morph') {
+      book.stop()
+      shown = target
+    }
+  }
+  return (v) => {
+    if (v < 0.02) return setMode('idle')
+    if (v >= 4.6) return setMode('float')
+    // map story clock to clip progress, chapter by chapter
+    const i = Math.min(4, Math.floor(v) + 1)
+    const stop = STOPS[i]
+    const local = v - (i - 1)
+    if (stop.morph) target = stop.morph[0] + (stop.morph[1] - stop.morph[0]) * Math.min(1, local)
+    else target = 1
+    setMode('morph')
+  }
+}
+
+function drift() {
   const o = presets.orbit
-  gsap.fromTo('[data-rise=limb]', { y: o.distance[1] }, { y: -40, ease: 'none', scrollTrigger: { trigger: '#orbit', start: 'top bottom', end: 'bottom bottom', scrub: o.scrub } })
-  // Patches drift in low gravity while on screen.
   $$('.drift > .patch').forEach((el, i) => {
-    const t = gsap.to(el, { y: i % 2 ? 6 : -6, x: i % 2 ? -3 : 3, duration: o.loop[0] / 2 + i, ease: o.ease, yoyo: true, repeat: -1, paused: true })
+    const t = gsap.to(el, { y: i % 2 ? 8 : -8, x: i % 2 ? -4 : 4, rotate: i % 2 ? -2 : 2, duration: o.loop[0] / 2 + i, ease: o.ease, yoyo: true, repeat: -1, paused: true })
     ScrollTrigger.create({ trigger: '#orbit', start: 'top bottom', end: 'bottom top', onToggle: (s) => t.paused(!s.isActive) })
   })
 }
 
-async function spaceScenes() {
-  const dr = presets.drift
-  gsap.fromTo('[data-rise=stars]', { y: 40 }, { y: -40, ease: 'none', scrollTrigger: { trigger: '#deep-space', start: 'top bottom', end: 'bottom top', scrub: dr.scrub } })
+async function splitDeep() {
   const h = $('#deep-space [data-split]')
-  if (h) {
-    const [{ SplitText }] = await Promise.all([import('gsap/SplitText')])
-    gsap.registerPlugin(SplitText)
-    const split = new SplitText(h, { type: 'chars', charsClass: 'ch' })
-    split.chars.forEach((c) => (c.style.display = 'inline-block'))
-    // Letters start spread by up to 120 px and settle into the word as the chapter arrives.
-    gsap.fromTo(
-      split.chars,
-      { x: () => gsap.utils.random(-dr.distance[0], dr.distance[0]), y: () => gsap.utils.random(-dr.distance[0] * 0.6, dr.distance[0] * 0.6), rotate: () => gsap.utils.random(-14, 14) },
-      { x: 0, y: 0, rotate: 0, ease: 'power2.out', stagger: 0.02, scrollTrigger: { trigger: '#deep-space', start: 'top 70%', end: 'top 20%', scrub: dr.scrub } },
-    )
-  }
-  const canvas = $('.stars-gl')
-  if (canvas) {
-    const io = new IntersectionObserver(
-      (entries, obs) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          obs.disconnect()
-          import('./stars-gl.js').then((m) => { m.start(canvas); gsap.fromTo(canvas, { y: 40 }, { y: -40, ease: 'none', scrollTrigger: { trigger: '#deep-space', start: 'top bottom', end: 'bottom top', scrub: dr.scrub } }) }).catch(() => {})
-        }
-      },
-      { rootMargin: '600px' },
-    )
-    io.observe(canvas)
-  }
+  if (!h) return
+  const { SplitText } = await import('gsap/SplitText')
+  gsap.registerPlugin(SplitText)
+  const split = new SplitText(h, { type: 'chars' })
+  split.chars.forEach((c) => (c.style.display = 'inline-block'))
+  const d = presets.drift
+  gsap.fromTo(
+    split.chars,
+    { x: () => gsap.utils.random(-d.distance[0], d.distance[0]), y: () => gsap.utils.random(-60, 60), rotate: () => gsap.utils.random(-18, 18) },
+    { x: 0, y: 0, rotate: 0, ease: 'power2.out', stagger: 0.02, scrollTrigger: { trigger: '#deep-space', start: 'top 80%', end: 'top 25%', scrub: d.scrub } },
+  )
+}
+
+function heroEntrance() {
+  if (window.scrollY > 4) return
+  // one orchestrated arrival: the sun swells, the giant word rises behind, the figure lands with weight
+  const f = presets.forge
+  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+  tl.from('.sun', { scale: 0.6, opacity: 0, duration: 1.2 }, 0)
+    .from('[data-giant="top"]', { yPercent: 60, duration: 1.0, ease: 'power4.out' }, 0.15)
+    .from('.figure', { y: -40, duration: f.duration + 0.25, ease: f.settle }, 0.35)
 }
 
 export function start(page) {
   smoothScroll()
   progressLine()
+  const pcanvas = $('.particles')
+  const field = pcanvas ? startParticles(pcanvas) : null
+
   if (page === 'astherion') {
-    altitudeFixed()
+    if (field) field.progress = 0.75
     ScrollTrigger.refresh()
     return
   }
-  skyLayers()
-  signature()
-  ascentScenes()
-  orbitScenes()
-  spaceScenes()
+
+  const sky = skyLayers()
+  const sun = sunAndFigure()
+  const fig = figure()
+  storyClock((v) => {
+    sky(v)
+    sun(v)
+    fig(v)
+    if (field) field.progress = v / 5
+  })
+  giantType()
+  drift()
+  splitDeep()
+  heroEntrance()
   altitudeReadout()
   document.fonts?.ready.then(() => ScrollTrigger.refresh())
   window.addEventListener('load', () => ScrollTrigger.refresh())
-}
-
-function altitudeFixed() {
-  // Astherion log: the stages draw their spine in as you read. Orbit preset.
-  const o = presets.orbit
-  $$('.stage-item').forEach((el) => {
-    const t = el.querySelector('.ticks')
-    if (t) gsap.fromTo(t, { opacity: 0.2 }, { opacity: 1, scrollTrigger: { trigger: el, start: 'top 80%', end: 'top 40%', scrub: o.scrub } })
-  })
-  gsap.fromTo('[data-rise=stars]', { y: 40 }, { y: -40, ease: 'none', scrollTrigger: { trigger: 'main', start: 'top top', end: 'bottom bottom', scrub: o.scrub } })
 }

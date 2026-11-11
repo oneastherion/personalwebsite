@@ -10,6 +10,7 @@
     "fonts": "node scripts/subset-fonts.mjs"
   },
   "dependencies": {
+    "@fontsource-variable/big-shoulders-display": "^5.3.0",
     "@fontsource-variable/bricolage-grotesque": "^5.3.0",
     "@fontsource/jetbrains-mono": "^5.3.0",
     "@gsap/react": "^2.1.2",

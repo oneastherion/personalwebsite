@@ -21,3 +21,6 @@ Thumbs.db
 # Logs
 *.log
 npm-debug.log*
+
+# Raw AI clips and key tests (frames in public/hero are the shipped output)
+media/

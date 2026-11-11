@@ -1,6 +1,6 @@
 import { astherionPage as a, site } from '../content.js'
 import { Sky, Cluster, Ctas } from './Chrome.jsx'
-import { StarsSvg } from './Art.jsx'
+
 
 function Ticks({ n }) {
   return (
@@ -19,9 +19,10 @@ export default function AstherionPage() {
         Skip to content
       </a>
       <div className="sky sky--static env-orbit" aria-hidden="true" />
+      <canvas className="particles" aria-hidden="true" />
       <Cluster altitude="408 km" />
-      <main id="main" tabIndex={-1} className="chapter env-orbit log">
-        <StarsSvg />
+      <main id="main" tabIndex={-1} className="env-orbit log">
+
         <div className="wrap chapter__body">
           <p className="backlink">
             <a href={a.back.href}>{a.back.label}</a>
