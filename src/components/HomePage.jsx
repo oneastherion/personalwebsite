@@ -4,12 +4,10 @@ import { PatchProvider, Patch } from './Patches.jsx'
 
 // Giant type that stands behind the figure. One word per stop of the climb.
 export const GIANT = [
-  { id: 'top', word: 'Oath' },
-  { id: 'hall', word: '0 m' },
-  { id: 'first-light', word: '3,000 m' },
-  { id: 'thin-air', word: '12,000 m' },
-  { id: 'orbit', word: '408 km' },
-  { id: 'deep-space', word: '384,000 km' },
+  { id: 'top', word: 'Knight' },
+  { id: 'hall', word: 'Scholar' },
+  { id: 'first-light', word: 'Scientist' },
+  { id: 'orbit', word: 'Astronaut' },
 ]
 
 function Role({ org, role, place, dates, contract }) {
@@ -189,7 +187,7 @@ export default function HomePage() {
                   {deepSpace.title}
                 </h2>
                 <p className="lead lead--big">{deepSpace.line}</p>
-                <img className="still-astro" src="/hero/morph/082.webp" width="720" height="735" alt="" loading="lazy" />
+                <img className="still-astro" src="/hero/morph/183.webp" width="640" height="654" alt="" loading="lazy" />
                 <div className="deep-grid">
                   <div>
                     <h3 className="sec">What I work with</h3>

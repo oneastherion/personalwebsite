@@ -3,8 +3,7 @@
 
 export const CLIPS = {
   idle: { dir: 'idle', count: 62, fps: 12 },
-  morph: { dir: 'morph', count: 83, fps: 16 },
-  float: { dir: 'float', count: 62, fps: 12 },
+  morph: { dir: 'morph', count: 184, fps: 12 },
 }
 
 const small = () => window.matchMedia('(max-width: 899px)').matches

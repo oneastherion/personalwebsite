@@ -16,12 +16,16 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)]
 
 // Story order. `morph` is the slice of the knight-to-astronaut clip each chapter scrubs through.
 const STOPS = [
-  { id: 'top', sky: 'forge', morph: null },
-  { id: 'hall', sky: 'forge', morph: [0, 0.2] },
-  { id: 'first-light', sky: 'dawn', morph: [0.2, 0.5] },
-  { id: 'thin-air', sky: 'atmosphere', morph: [0.5, 0.78] },
-  { id: 'orbit', sky: 'orbit', morph: [0.78, 1] },
-  { id: 'deep-space', sky: 'deep', morph: null },
+  { id: 'top', sky: 'forge', morph: null, giant: 'top' },
+  // knight -> scholar while the education chapter reads
+  { id: 'hall', sky: 'forge', morph: [0, 1 / 3], giant: 'hall' },
+  // scholar -> scientist through UT Southwestern
+  { id: 'first-light', sky: 'dawn', morph: [1 / 3, 2 / 3], giant: 'first-light' },
+  // the scientist holds through Abbott
+  { id: 'thin-air', sky: 'atmosphere', morph: [2 / 3, 2 / 3], giant: 'first-light' },
+  // scientist -> astronaut for Astherion
+  { id: 'orbit', sky: 'orbit', morph: [2 / 3, 1], giant: 'orbit' },
+  { id: 'deep-space', sky: 'deep', morph: [1, 1], giant: 'orbit' },
 ]
 
 function smoothScroll() {
@@ -95,8 +99,8 @@ function giantType() {
     ScrollTrigger.create({
       trigger: '#' + stop.id,
       start: 'top 55%',
-      onEnter: () => show(stop.id, 1),
-      onLeaveBack: () => show(STOPS[i - 1].id, -1),
+      onEnter: () => show(stop.giant, 1),
+      onLeaveBack: () => show(STOPS[i - 1].giant, -1),
     })
   })
 }
@@ -138,25 +142,29 @@ function figure() {
     shown += (target - shown) * 0.22
     book.scrub('morph', shown)
   })
+  // in deep space the astronaut floats: a slow low-gravity bob on the finished last frame
+  const bob = gsap.to('.figure__canvas', { y: -14, rotate: -0.6, duration: presets.drift.loop[0] / 2, ease: 'sine.inOut', yoyo: true, repeat: -1, paused: true })
   const setMode = (m) => {
     if (m === mode) return
     mode = m
     if (m === 'idle') book.loop('idle')
-    if (m === 'float') book.load('float').then(() => mode === 'float' && book.loop('float'))
     if (m === 'morph') {
       book.stop()
       shown = target
     }
   }
   return (v) => {
-    if (v < 0.02) return setMode('idle')
-    if (v >= 4.6) return setMode('float')
+    if (v < 0.02) {
+      bob.pause()
+      return setMode('idle')
+    }
     // map story clock to clip progress, chapter by chapter
-    const i = Math.min(4, Math.floor(v) + 1)
+    const i = Math.min(5, Math.floor(v) + 1)
     const stop = STOPS[i]
-    const local = v - (i - 1)
-    if (stop.morph) target = stop.morph[0] + (stop.morph[1] - stop.morph[0]) * Math.min(1, local)
-    else target = 1
+    const local = Math.min(1, v - (i - 1))
+    target = stop.morph[0] + (stop.morph[1] - stop.morph[0]) * local
+    if (v >= 4.4) bob.play()
+    else bob.pause()
     setMode('morph')
   }
 }
