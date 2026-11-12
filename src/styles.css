@@ -75,7 +75,7 @@ html { background: #120f0d; -webkit-text-size-adjust: 100%; scrollbar-gutter: st
 html.panel-open { overflow: hidden; }
 body {
   margin: 0; font-family: var(--f-text); font-size: var(--step-0); line-height: 1.55;
-  color: var(--ink); background: transparent; overflow-x: clip; -webkit-font-smoothing: antialiased;
+  color: var(--ink); background: #120f0d; overflow-x: clip; -webkit-font-smoothing: antialiased;
 }
 h1, h2, h3, p, ul, ol, dl, dd { margin: 0; padding: 0; }
 ul, ol { list-style: none; }
@@ -94,11 +94,11 @@ body::after {
 }
 
 /* ------------------------------------------------------------------ sky + particles (fixed, behind everything) */
-.sky { position: fixed; inset: 0; z-index: -2; pointer-events: none; }
+.sky { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
 .sky__layer { position: absolute; inset: 0; background: radial-gradient(120% 80% at 50% 110%, var(--bot), var(--top) 70%); }
 .sky__layer:not(:first-child) { opacity: 0; }
 .sky--static { background: radial-gradient(120% 80% at 50% 110%, var(--bot), var(--top) 70%); }
-.particles { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0; transition: opacity 1.2s ease; }
+.particles { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: 0; transition: opacity 1.2s ease; }
 .particles.is-on { opacity: 1; }
 
 /* ------------------------------------------------------------------ the stage: sticky behind all chapters */
@@ -318,3 +318,6 @@ html:not([data-motion='on']) .sky__layer:not(:first-child) { opacity: 0; }
 
 /* the wide avatar bleeds past the edges on phones; never let it scroll the page sideways */
 html, .track { overflow-x: clip; }
+
+/* the page sits above the fixed sky and particle layers */
+main { position: relative; z-index: 1; }

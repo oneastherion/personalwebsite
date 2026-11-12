@@ -6,12 +6,13 @@ export const CLIPS = {
   morph: { dir: 'morph', count: 184, fps: 12 },
 }
 
-const small = () => window.matchMedia('(max-width: 899px)').matches
+// The artifact preview ships one frame size to stay under its file limit.
+const small = () => !import.meta.env.VITE_ONE_SIZE && window.matchMedia('(max-width: 899px)').matches
 const pad = (n) => String(n).padStart(3, '0')
 
 export function frameUrl(clip, i, sm = small()) {
   const c = CLIPS[clip]
-  return `/hero/${c.dir}${sm ? '-s' : ''}/${pad(i)}.webp`
+  return `hero/${c.dir}${sm ? '-s' : ''}/${pad(i)}.webp`
 }
 
 export class Flipbook {
