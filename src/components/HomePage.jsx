@@ -68,7 +68,7 @@ function Stage() {
         ))}
       </div>
       <div className="figure">
-        <img className="figure__poster" src="/hero/idle/000.webp" srcSet="/hero/idle-s/000.webp 440w, /hero/idle/000.webp 760w" sizes="(max-width: 899px) 440px, 760px" width="760" height="505" alt="" fetchpriority="high" />
+        <img className="figure__poster" src="/hero/idle/000.webp" srcSet="/hero/idle-s/000.webp 420w, /hero/idle/000.webp 720w" sizes="(max-width: 899px) 420px, 720px" width="720" height="735" alt="" fetchpriority="high" />
         <canvas className="figure__canvas" />
       </div>
     </div>
@@ -216,7 +216,7 @@ export default function HomePage() {
                   {sections.frontier.title}
                 </h2>
                 <p className="lead lead--big">{deepSpace.line}</p>
-                <img className="still-astro" src="/hero/morph/183.webp" width="760" height="505" alt="" loading="lazy" />
+                <img className="still-astro" src="/hero/morph/183.webp" width="640" height="654" alt="" loading="lazy" />
                 <div id="contact" className="contact">
                   <p>
                     <a className="mail" href={`mailto:${site.email}`}>
